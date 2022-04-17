@@ -1,0 +1,46 @@
+.header {
+    background-color: #ff00ff;
+    text-align: center;
+    padding: 0.2rem 0;
+}
+
+.input {
+    background-color: #addaff;
+    padding: 1rem;
+}
+
+.input form {
+    width: 100vw;
+}
+
+.input form input {
+    width: 85vw;
+}
+
+.input button {
+    margin: 0 1rem;
+}
+
+.list {
+    background-color: #beffaa;
+    padding: 1rem;
+}
+
+
+.item {
+    background-color: #9e9e9e;
+    margin: 1rem 0rem;
+}
+
+.item button {
+    margin: 0 1rem;
+}
+
+
+.footer {
+    background-color: #b78aff;
+    text-align: center;
+    margin: 1rem 0;
+    padding: 1rem 0;
+}
+
