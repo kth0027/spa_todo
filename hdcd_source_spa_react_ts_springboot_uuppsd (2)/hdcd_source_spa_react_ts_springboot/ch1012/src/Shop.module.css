@@ -1,0 +1,19 @@
+.centered {
+  display: flex;
+  background-color: #FFFFFF;
+  flex-direction: column;
+  position: relative;
+  align-items: center;
+}
+
+.align_center {
+  text-align: center;
+}
+
+.align_right {
+  text-align: right;
+}
+
+.align_left {
+  text-align: left;
+}
