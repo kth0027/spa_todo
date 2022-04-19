@@ -40,6 +40,9 @@
 
 .item button {
     margin: 0 1rem;
+    background-color: rgb(255, 174, 174);
+    color: rgb(0, 0, 0);
+    border-radius: 0.2rem;
 }
 
 
