@@ -69,20 +69,42 @@ import TodoContext from "../components/contexts/todo";
 //     );
 // };
 
-const TodoList = () => {
-    const { state, actions } = useContext(TodoContext);
-    return (
-      <div className={styles.list}>
-        {state.todos.map((todo) => (
-          <TodoItem
-            todo={todo}
-            key={todo.id}
-            onRemove={actions.onRemove}
-            onToggle={actions.onToggle}
-          />
-        ))}
-      </div>
-    );
-  };
+// const TodoList = () => {
+//     const { state, actions } = useContext(TodoContext);
+//     return (
+//       <div className={styles.list}>
+//         {state.todos.map((todo) => (
+//           <TodoItem
+//             todo={todo}
+//             key={todo.id}
+//             onRemove={actions.onRemove}
+//             onToggle={actions.onToggle}
+//           />
+//         ))}
+//       </div>
+//     );
+//   };
+
+interface Props {
+  readonly todos: Todo[];
+  readonly onRemove: (id: number) => void;
+  readonly onToggle: (id: number) => void;
+}
+
+const TodoList = ({ todos, onRemove, onToggle }: Props) => {
+
+  return (
+    <div className={styles.list}>
+      {todos.map((todo) => (
+        <TodoItem
+          todo={todo}
+          key={todo.id}
+          onRemove={onRemove}
+          onToggle={onToggle}
+        />
+      ))}
+    </div>
+  );
+};
 
 export default TodoList;

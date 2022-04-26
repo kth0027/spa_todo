@@ -8,6 +8,16 @@ import { Provider } from "react-redux";
 import todos from "./modules/todos";
 import { composeWithDevTools } from "redux-devtools-extension";
 
+
+// const root = ReactDOM.createRoot(
+//   document.getElementById('root') as HTMLElement
+// );
+// root.render(
+//   <React.StrictMode>
+//     <App />
+//   </React.StrictMode>
+// );
+
 const store = createStore(todos, composeWithDevTools());
 
 ReactDOM.render(

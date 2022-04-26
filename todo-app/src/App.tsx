@@ -5,6 +5,9 @@
 //
 import Todos from './components/Todos';
 
+// 
+import TodosContainer from './containers/TodosContainer';
+
 // 인터페이스 정의
 export interface Todo {
   id : number;
@@ -13,10 +16,17 @@ export interface Todo {
 }
 
 
+// function App() {
+//   return (
+//       <Todos/>
+//   );
+// }
+
 function App() {
   return (
-      <Todos/>
+        <TodosContainer />
   );
 }
+
 
 export default App;
