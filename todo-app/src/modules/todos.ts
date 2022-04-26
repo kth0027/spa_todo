@@ -1,6 +1,7 @@
 // 타입스크립트 임포트
 import { Todo } from "../App";
 
+
 //createAction 함수사용
 import { createAction } from "redux-actions";
 import { createReducer } from "typesafe-actions";
@@ -17,6 +18,22 @@ const ADD_TODO = "ADD_TODO"
 const TOGGLE_TODO_STATUS = "TOGGLE_TODO_STATUS"
 const REMOVE_TODO = "REMOVE_TODO"
 const CLEAR_ALL_TODOS = "CLEAR_ALL_TODOS"
+
+//상태 복원 액션 타입
+const RESTORE = "RESTORE";
+
+// 필터링 유형 변경 액션 타입
+const CHANGE_FILTER = "CHANGE_FILTER";
+
+// 항목수정
+const EDIT_TODO = "EDIT_TODO";
+
+// 편집항목 ID 설정 액션 타입
+const SET_EDITING_ID = "SET_EDITING_ID";
+
+// 편집항목 ID 리셋 액션 타입
+const RESET_EDITING_ID = "RESET_EDITING_ID";
+
 
 
 // // 액션 생성 함수
@@ -62,12 +79,32 @@ export const removeTodo = createAction(REMOVE_TODO, (id: number) => id);
 
 export const clearAllTodos = createAction(CLEAR_ALL_TODOS);
 
+// 상태 복원 액션 생성 함수
+export const restore = createAction(RESTORE, (data: string) => data);
+
+// 필터링 유형 변경 액션 생성 함수
+export const changeFilter = createAction(CHANGE_FILTER, (filter: string) => filter);
+
+// 항목 수정
+export const editTodo = createAction(EDIT_TODO, (id:number, input:string) => ({
+  id,input,
+}));
+
+// 
+
+export const setEditingId = createAction(SET_EDITING_ID, (id: number) => id);
+
+export const resetEditingId = createAction(RESET_EDITING_ID);
+
+
 
 // 상태 인터페이스 정의
 export interface TodoState {
   input: string;
   todos: Todo[];
   nextTodoId: number;
+  filter: string;
+  editingId: number;
 }
 
 
@@ -76,8 +113,9 @@ const initialState: TodoState = {
   input: "",
   todos: [],
   nextTodoId: 1,
+  filter: "ALL",
+  editingId: 0,
 };
-
 
 // // 액션 타입 정의
 // type TodoAction = 
@@ -134,7 +172,7 @@ const todos = createReducer(
       input: input,
     }),
     [ADD_TODO]: (state, { payload: todo }) => {
-      const newTodo = {...todo, id: state.nextTodoId};
+      const newTodo = { ...todo, id: state.nextTodoId };
       const nextTodoId = state.nextTodoId + 1;
 
       return ({
@@ -157,7 +195,45 @@ const todos = createReducer(
       ...state,
       todos: [],
     }),
+
+
+    // 상태 복원 액션 처리
+    [RESTORE]: (state, action) => {
+      console.log(action);
+      console.log(action.payload.todos);
+      console.log(action.payload.nextTodoId);
+      return ({
+        ...state,
+        todos: action.payload.todos,
+        nextTodoId: action.payload.nextTodoId,
+      })
+    },
+
+
+    // 필터링 유형 변경 액션 처리
+    [CHANGE_FILTER]: (state, { payload: filter }) => ({
+      ...state,
+      filter: filter,
+    }),
+
+    // Todo 항목 변경 액션 처리
+    [EDIT_TODO]: (state, action) => ({
+      ...state,
+      todos: state.todos.map((todo) =>
+        todo.id === action.payload.id ? { ...todo, text: action.payload.input } : todo
+      ),
+    }),
+
+    [SET_EDITING_ID]: (state, { payload: id }) => ({
+      ...state,
+      editingId: id,
+    }),
+    [RESET_EDITING_ID]: (state) => ({
+      ...state,
+      editingId: 0,
+    }),
   }
 );
+
 
 export default todos;

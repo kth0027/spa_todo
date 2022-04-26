@@ -86,21 +86,27 @@ import TodoContext from "../components/contexts/todo";
 //   };
 
 interface Props {
-  readonly todos: Todo[];
+  // readonly todos: Todo[];
+  // 선택 속성 변경
+  readonly todos?: Todo[];
   readonly onRemove: (id: number) => void;
   readonly onToggle: (id: number) => void;
+
+  // 함수타입  추가
+  readonly onEdit : (id:number, input:string) => void;
 }
 
-const TodoList = ({ todos, onRemove, onToggle }: Props) => {
+const TodoList = ({ todos, onRemove, onToggle, onEdit }: Props) => {
 
   return (
     <div className={styles.list}>
-      {todos.map((todo) => (
+      {todos && todos.map((todo) => (
         <TodoItem
           todo={todo}
           key={todo.id}
           onRemove={onRemove}
           onToggle={onToggle}
+          onEdit={onEdit}
         />
       ))}
     </div>

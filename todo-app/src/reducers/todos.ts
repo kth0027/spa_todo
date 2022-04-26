@@ -1,40 +1,32 @@
 import { Todo } from "../App";
-import { createAction } from "redux-actions"
 import { createReducer } from "typesafe-actions"
-
-const CHANGE_TODO_INPUT = "CHANGE_TODO_INPUT";
-const ADD_TODO = "ADD_TODO";
-const TOGGLE_TODO_STATUS = "TOGGLE_TODO_STATUS";
-const REMOVE_TODO = "REMOVE_TODO";
-const CLEAR_ALL_TODOS = "CLEAR_ALL_TODOS";
-const RESTORE = "RESTORE";
-
-
-export const changeTodoInput = createAction(CHANGE_TODO_INPUT, (input: string) => input);
-
-export const addTodo = createAction(ADD_TODO, (input: string) => ({
-  text: input,
-  done: false,
-}));
-
-export const toggleTodoStatus = createAction(TOGGLE_TODO_STATUS, (id: number) => id);
-
-export const removeTodo = createAction(REMOVE_TODO, (id: number) => id);
-
-export const clearAllTodos = createAction(CLEAR_ALL_TODOS);
-
-export const restore = createAction(RESTORE, (data: string) => data);
+import {
+  CHANGE_TODO_INPUT,
+  ADD_TODO,
+  TOGGLE_TODO_STATUS,
+  REMOVE_TODO,
+  CLEAR_ALL_TODOS,
+  RESTORE,
+  CHANGE_FILTER,
+  EDIT_TODO,
+  SET_EDITING_ID,
+  RESET_EDITING_ID,
+} from "../constants/ActionTypes";
 
 export interface TodoState {
   input: string;
   todos: Todo[];
   nextTodoId: number;
+  filter: string;
+  editingId: number;
 }
 
 const initialState: TodoState = {
   input: "",
   todos: [],
   nextTodoId: 1,
+  filter: "ALL",
+  editingId: 0,
 };
 
 const todos = createReducer(
@@ -78,6 +70,24 @@ const todos = createReducer(
         nextTodoId: action.payload.nextTodoId,
       })
     },
+    [CHANGE_FILTER]: (state, { payload: filter }) => ({
+      ...state,
+      filter: filter,
+    }),
+    [EDIT_TODO]: (state, action) => ({
+      ...state,
+      todos: state.todos.map((todo) =>
+        todo.id === action.payload.id ? { ...todo, text: action.payload.input } : todo
+      ),
+    }),
+    [SET_EDITING_ID]: (state, { payload: id }) => ({
+      ...state,
+      editingId: id,
+    }),
+    [RESET_EDITING_ID]: (state) => ({
+      ...state,
+      editingId: 0,
+    }),
   }
 );
 

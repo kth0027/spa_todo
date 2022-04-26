@@ -14,7 +14,8 @@ import { Todo } from "../App"
 // TODO CONTEXT로드
 import { TodoProvider } from "./contexts/todo";
 
-//
+// Todofilter 컴포넌트 임포트
+import TodoFilter from "./TodoFilter";
 
 
 
@@ -130,14 +131,26 @@ import { TodoProvider } from "./contexts/todo";
 
 interface Props {
   readonly input: string;
-  readonly todos: Todo[];
+  
+  // readonly todos: Todo[];
+  // 선택 속성으로 변경
+  readonly todos? : Todo[];
+  
   readonly onRemove: (id: number) => void;
   readonly onToggle: (id: number) => void;
   readonly onClearAll: () => void;
   readonly onInsert: (input: string) => void;
   readonly onChangeInput: (input: string) => void;
+
+  // 타입추가
+  readonly filter : string;
+  readonly onChangeFilter : (filter:string) => void;
+
+  // 수정
+  readonly onEdit : (id:number, input:string) => void;
 }
 
+// filter, onChangeFilter props로 수신
 const Todos = ({
   input,
   todos,
@@ -146,6 +159,9 @@ const Todos = ({
   onToggle,
   onRemove,
   onClearAll,
+  filter,
+  onChangeFilter,
+  onEdit,
 }: Props) => {
   return (
     <div>
@@ -155,7 +171,10 @@ const Todos = ({
         onInsert={onInsert}
         onChangeInput={onChangeInput}
       ></TodoInput>
-      <TodoList todos={todos} onRemove={onRemove} onToggle={onToggle} />
+      {/* filter, onChangeFilter를 props로 전달 */}
+      <TodoFilter filter={filter} onChangeFilter={onChangeFilter}></TodoFilter>
+
+      <TodoList todos={todos} onRemove={onRemove} onToggle={onToggle} onEdit={onEdit}/>
       <TodoFooter onClearAll={onClearAll} />
     </div>
   );

@@ -4,18 +4,39 @@ import React, {useCallback} from "react";
 import { connect, useDispatch, useSelector } from "react-redux";
 
 // 액션 생성 함수 임포트
+// import {
+//   changeTodoInput,
+//   addTodo,
+//   toggleTodoStatus,
+//   removeTodo,
+//   clearAllTodos,
+//   changeFilter,
+//   // Todo 항목 변경 액션 생성 함수 임포트
+//   editTodo,
+// } from "../modules/todos";
+
 import {
   changeTodoInput,
   addTodo,
   toggleTodoStatus,
   removeTodo,
   clearAllTodos,
-} from "../modules/todos";
+  changeFilter,
+  editTodo,
+} from "../actions/todos";
+
 import Todos from "../components/Todos";
 import { TodoState } from "../modules/todos";
+// import { Todo } from "../App";
+
 // import { Dispatch } from 'redux'
 
 // import {Todo} from "../App";
+
+// import { getFilteredTodos } from "../modules/selector";
+import { getFilteredTodos } from "../selectors/todos";
+
+
 
 
 
@@ -122,9 +143,16 @@ interface Props extends PropsState, PropsDispatch {}
 const TodosContainer = () => {
   
   // 스토어 상태 조회
-  const { input, todos } = useSelector((state: TodoState) => ({
+  // const { input, filter, todos } = useSelector((state: TodoState) => ({
+  //   input: state.input,
+  //   filter : state.filter,
+  //   todos: state.todos,
+  // }));
+
+  const { input, filter, filteredTodos } = useSelector((state: TodoState) => ({
     input: state.input,
-    todos: state.todos,
+    filter: state.filter,
+    filteredTodos: getFilteredTodos(state),
   }));
   
   // 스토어 dispatch 사용가능
@@ -136,16 +164,46 @@ const TodosContainer = () => {
   const onToggle = useCallback((id: number) => dispatch(toggleTodoStatus(id)), [dispatch]);
   const onRemove = useCallback((id: number) => dispatch(removeTodo(id)), [dispatch]);
   const onClearAll = useCallback(() => dispatch(clearAllTodos()), [dispatch]);
+  // 필터링 유형 변경 액션 디스패치 함수
+  const onChangeFilter = useCallback((filter: string) => dispatch(changeFilter(filter)),[dispatch]);
 
+  // Todo 항목 변경 함수 정의
+  const onEdit = useCallback((id: number, input: string) => dispatch(editTodo(id, input)), [dispatch]);
+ 
+  // 검색 필터링
+  // const getFilteredTodos = (todos: Todo[], filter: string) => {
+  //   if (filter === "ALL") {
+  //     return todos;
+  //   }
+
+  //   if (filter === "A") {
+  //     return todos.filter((todo) => {
+  //       return todo.done === false;
+  //     });
+  //   }
+
+  //   if (filter === "B") {
+  //     return todos.filter((todo) => {
+  //       return todo.done === true;
+  //     });
+  //   }
+  // };
+
+  // const filteredTodos = getFilteredTodos(todos, filter);
+
+  //  filter, onChangeFilter를 props로 전달
   return (
     <Todos
       input={input}
-      todos={todos}
+      todos={filteredTodos}
       onChangeInput={onChangeInput}
       onInsert={onInsert}
       onToggle={onToggle}
       onRemove={onRemove}
       onClearAll={onClearAll}
+      filter={filter}
+      onChangeFilter={onChangeFilter}
+      onEdit={onEdit}
     />
   );
 };

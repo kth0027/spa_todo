@@ -11,6 +11,12 @@ import todos from "./modules/todos";
 import { composeWithDevTools } from "redux-devtools-extension";
 
 
+// 상태복원 액션 생성 함수 임포트
+// import { restore } from './modules/todos';
+import { restore } from "./actions/todos";
+import configureStore from "./store";
+
+
 
 
 // const root = ReactDOM.createRoot(
@@ -22,7 +28,28 @@ import { composeWithDevTools } from "redux-devtools-extension";
 //   </React.StrictMode>
 // );
 
-const store = createStore(todos, composeWithDevTools());
+// const store = createStore(todos, composeWithDevTools());
+
+const store = configureStore(todos);
+
+// 상태 복원 함수
+function loadData() {
+  try {
+    const data = localStorage.getItem("todo-app-data");
+    console.log("loadData data : " + data);
+
+    if (!data) return;
+
+    // 상태 복원 액션 디스패치
+    store.dispatch(restore(JSON.parse(data)));
+
+  } catch (e) {
+    console.log("localStorage is not working");
+  }
+}
+
+// 상태 복원 함수 실행
+loadData();
 
 ReactDOM.render(
   <React.StrictMode>
